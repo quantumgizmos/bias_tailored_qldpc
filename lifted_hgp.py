@@ -1,5 +1,5 @@
 import numpy as np
-import protograph as pt
+import ldpc.protograph as pt
 from bposd.css import css_code
 
 def I(n):
