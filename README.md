@@ -2,6 +2,25 @@
 
 This repository cotains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in arxiv:2202:xxxx. Also included are various examples showing how our code base can be used to construct lifted product codes.
 
+- [Bias-tailored quantum LDPC codes](#bias-tailored-quantum-ldpc-codes)
+  * [Setup](#setup)
+- [Classical error correction](#classical-error-correction)
+  * [Quasi-cyclic codes](#quasi-cyclic-codes)
+    + [Permutation matrices](#permutation-matrices)
+    + [The ring of circulants](#the-ring-of-circulants)
+      - [Matrix version](#matrix-version)
+      - [Ring version](#ring-version)
+    + [Protographs](#protographs)
+    + [The repetition code as a quasi-cyclic code](#the-repetition-code-as-a-quasi-cyclic-code)
+- [Quantum error correction](#quantum-error-correction)
+  * [Calderbank, Shor & Steane (CSS codes)](#calderbank--shor---steane--css-codes-)
+  * [Hypergraph product codes](#hypergraph-product-codes)
+    + [The toric code form the hypergraph product](#the-toric-code-form-the-hypergraph-product)
+    + [A quantum LDPC code from the hypergraph product](#a-quantum-ldpc-code-from-the-hypergraph-product)
+  * [Lifted product codes](#lifted-product-codes)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 ## Setup
 The code in this repository requires functions from [`LDPC`](https://github.com/quantumgizmos/ldpc) and [`BPOSD`](https://github.com/quantumgizmos/bp_osd). To install, run the following command
 
@@ -405,7 +424,15 @@ qcode.test()
 
 
 
+## Lifted product codes
 
-```python
+The lifted product is an extension of the hypergraph product that allows quantum codes to be constructed from pairs of classical quasi-cyclic codes. The lifted product was first proposed by Pantaleev and Kalachev and has been proved to yield asympotically good quantum LDPC codes with linear distance-to-block length scaling. In a lifted product code, the `hx` and `hz` CSS components are constructed from two protographs defined as follows:
 
 ```
+ax=[ a1 ⊗ E, a2^T ⊗ E ]
+az=[ E ⊗ a2, a1^t ⊗ E]
+```
+
+where `a1` and `a2` are the protographs of classical quasi-cyclic codes and `E` is the identity protograph element. The `hx` and `hz` components are obtained by mapping `ax` and `az` to their binary representation. Similiar to the hypergraph product, the lifted product allows a quantum code to be constructed from any pair of protographs. As an example, consider the protograph below
+
+
