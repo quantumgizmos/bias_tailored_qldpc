@@ -1,6 +1,7 @@
 # Bias-tailored quantum LDPC codes
 
-This repository cotains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in arxiv:2202:xxxx. Also included are various examples showing how our code base can be used to construct lifted product codes.
+This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in arxiv:2202:xxxx. Also included are various examples showing how our code base can be used to construct lifted product codes.
+
 
 - [Bias-tailored quantum LDPC codes](#bias-tailored-quantum-ldpc-codes)
   * [Setup](#setup)
@@ -20,6 +21,8 @@ This repository cotains the code for the decoding simulations of bias-tailored q
   * [Lifted product codes](#lifted-product-codes)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 
 ## Setup
 The code in this repository requires functions from [`LDPC`](https://github.com/quantumgizmos/ldpc) and [`BPOSD`](https://github.com/quantumgizmos/bp_osd). To install, run the following command
@@ -434,5 +437,198 @@ az=[ E ⊗ a2, a1^t ⊗ E]
 ```
 
 where `a1` and `a2` are the protographs of classical quasi-cyclic codes and `E` is the identity protograph element. The `hx` and `hz` components are obtained by mapping `ax` and `az` to their binary representation. Similiar to the hypergraph product, the lifted product allows a quantum code to be constructed from any pair of protographs. As an example, consider the protograph below
+
+
+```python
+a1=pt.array([
+        [(0), (11), (7), (12)],
+        [(1), (8), (1), (8)],
+        [(11), (0), (4), (8)],
+        [(6), (2), (4), (12)]])
+
+a1
+```
+
+
+
+
+    protograph.array([[(0),(11),(7),(12)],[(1),(8),(1),(8)],[(11),(0),(4),(8)],[(6),(2),(4),(12)]])
+
+
+
+Mapping the above protograph to a binary with lift parameter L=13 gives the following classical code 
+
+
+```python
+H=a1.to_binary(lift_parameter=13)
+n,k,d,_,_=get_code_parameters(H)
+print(f"Code parameters: [{n},{k},{d}]")
+```
+
+    Code parameters: [52,3,26]
+
+
+Now if we take the hypergraph product of this binary matrix, we get the following CSS code
+
+
+```python
+qcode=hgp(H,H,compute_distance=True) #this will take a while
+qcode.test()
+```
+
+    <Unnamed CSS code>, (4,8)-[[5408,18,26]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[5408,18,26]]
+
+
+
+
+
+    True
+
+
+
+The rate of this code is:
+
+
+```python
+rate=qcode.K/qcode.N
+rate
+```
+
+
+
+
+    0.04326923076923077
+
+
+
+It is clear that the rate of this code is quite small! In the lifted product, we instead define the quantum code as a hypergraph product of two protographs. This requires performing all tensor product operations over the ring algebra, but results in a much more compact code.
+
+
+```python
+from lifted_hgp import lifted_hgp
+quantum_protograph_code=lifted_hgp(lift_parameter=13,a=a1,b=a1)
+print(quantum_protograph_code.hx_proto)
+```
+
+    [[(0) () () () (11) () () () (7) () () () (12) () () () (0) (-1) (-11) (-6) () () () () () () () () () () () ()]
+     [() (0) () () () (11) () () () (7) () () () (12) () () (-11) (-8) (0) (-2) () () () () () () () () () () () ()]
+     [() () (0) () () () (11) () () () (7) () () () (12) () (-7) (-1) (-4) (-4) () () () () () () () () () () () ()]
+     [() () () (0) () () () (11) () () () (7) () () () (12) (-12) (-8) (-8) (-12) () () () () () () () () () () () ()]
+     [(1) () () () (8) () () () (1) () () () (8) () () () () () () () (0) (-1) (-11) (-6) () () () () () () () ()]
+     [() (1) () () () (8) () () () (1) () () () (8) () () () () () () (-11) (-8) (0) (-2) () () () () () () () ()]
+     [() () (1) () () () (8) () () () (1) () () () (8) () () () () () (-7) (-1) (-4) (-4) () () () () () () () ()]
+     [() () () (1) () () () (8) () () () (1) () () () (8) () () () () (-12) (-8) (-8) (-12) () () () () () () () ()]
+     [(11) () () () (0) () () () (4) () () () (8) () () () () () () () () () () () (0) (-1) (-11) (-6) () () () ()]
+     [() (11) () () () (0) () () () (4) () () () (8) () () () () () () () () () () (-11) (-8) (0) (-2) () () () ()]
+     [() () (11) () () () (0) () () () (4) () () () (8) () () () () () () () () () (-7) (-1) (-4) (-4) () () () ()]
+     [() () () (11) () () () (0) () () () (4) () () () (8) () () () () () () () () (-12) (-8) (-8) (-12) () () () ()]
+     [(6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () () () () (0) (-1) (-11) (-6)]
+     [() (6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () () () (-11) (-8) (0) (-2)]
+     [() () (6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () () (-7) (-1) (-4) (-4)]
+     [() () () (6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () (-12) (-8) (-8) (-12)]]
+
+
+Mapping the above protograph to binary gives us the `hx` component of the CSS code.
+
+
+```python
+hx=quantum_protograph_code.hx_proto.to_binary(lift_parameter=13)
+hx
+```
+
+
+
+
+    array([[1, 0, 0, ..., 0, 0, 0],
+           [0, 1, 0, ..., 0, 0, 0],
+           [0, 0, 1, ..., 0, 0, 0],
+           ...,
+           [0, 0, 0, ..., 0, 1, 0],
+           [0, 0, 0, ..., 0, 0, 1],
+           [0, 0, 0, ..., 0, 0, 0]])
+
+
+
+Similarily for `hz`
+
+
+```python
+hz=quantum_protograph_code.hz_proto.to_binary(lift_parameter=13)
+hz
+```
+
+
+
+
+    array([[1, 0, 0, ..., 0, 0, 0],
+           [0, 1, 0, ..., 0, 0, 0],
+           [0, 0, 1, ..., 0, 0, 0],
+           ...,
+           [0, 0, 0, ..., 0, 1, 0],
+           [0, 0, 0, ..., 0, 0, 1],
+           [0, 0, 0, ..., 0, 0, 0]])
+
+
+
+Now, constructing a CSS code from this pair `hx` and `hz` gives the following
+
+
+```python
+qcode=css_code(hx,hz)
+qcode.test()
+```
+
+    <Unnamed CSS code>, (4,8)-[[416,18,nan]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
+
+
+
+
+
+    True
+
+
+
+Note, we can skip the above step and obtain the CSS code directly from the `lifted_hgp` object 
+
+
+```python
+qcode=lifted_hgp(lift_parameter=13,a=a1,b=a1)
+qcode.test()
+
+```
+
+    <Unnamed CSS code>, (4,8)-[[416,18,nan]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
+
+
+
+
+
+    True
+
+
+
+We have now seen two examples of how a quantum code can be constructed from the [52,3,6] quasi-cyclic code:
+- Taking the hypergraph product of the code's binary parity check matrix yields a CSS code with parameters [[[5408,18,26]]]
+- Taking the lifted product of the code's protgraph yields a CSS code with [[416,18,d~20]]
+
+Note that the distance of `d~20` for the lifted product is an estimate based on the lowest weight numerically observed logical operator (more on that below). Whilst the distance of the lifted product is less than that for the hypergrap product (`d~20` vs. `d=26`), the lifted product has a much higher rate. Also, note that the lifted product above has a much higher distance than the [[400,16,6]] hypergraph product constructed from the [16,4,6] classical LDPC code. 
 
 
