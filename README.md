@@ -18,6 +18,7 @@ A binary linear code is defined by its parity check matrix. Eg. the parity check
 
 
 ```python
+import numpy as np
 from ldpc.codes import ring_code
 
 H=ring_code(4)
@@ -167,8 +168,7 @@ A=pt.array([[(1,2),(0),()],
 print(a)
 ```
 
-    [[(1,2) (0) ()]
-     [(0) (0,1) (1)]]
+    (2,4)
 
 
 We can convert this to a binary parity check matrix as follows:
@@ -312,4 +312,100 @@ The `qcode.test` function executed above tells us that the `hx` and `hz` matrice
 ## Hypergraph product codes
 Section 3.3 in arXiv:2202:xxxx
 
+We have now seen that CSS stabiliser codes cannot take any arbitrary combination of `hx` and `hz` matrices as inputs due to the requirement that stabilisers must commute. So how do we create quantum codes from the starting point of classical codes? One solution is to use a code construction method called the hypegraph product which was first proposed by Tillich and Zemor. This defines the `hx` and `hz` components of the CSS code as follows:
 
+```
+hx=[ h1 ⊗ I, h2^T ⊗ I ]
+hz=[ I ⊗ h2, h1^t ⊗ I]
+```
+
+### The toric code form the hypergraph product
+
+The toric code can be constructed from the hypergraph product of two closed loop repetition codes.
+
+where `h1` and `h2` are two classical *seed* codes. It is straightforward to verify that the above two parity check matrices will commute for any combination of the seed codes. The hypergraph product therefore allows us to construct a quantum code from any arbitrary pair of classical binary codes.
+
+
+```python
+from bposd.hgp import hgp
+h1=ring_code(2)
+h2=ring_code(3)
+
+qcode=hgp(h1,h2,compute_distance=True)
+qcode.test()
+
+```
+
+    <Unnamed CSS code>, (2,4)-[[12,2,2]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (2,4)-[[12,2,2]]
+
+
+
+
+
+    True
+
+
+
+### A quantum LDPC code from the hypergraph product
+
+The hypergraph product can also be used to create quantum LDPC codes from the starting point of classical LDPC codes. For example, consider the following classical LDPC code of the length 16
+
+
+```python
+H=np.array([[1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1],
+            [0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0],
+            [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+            [0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+            [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+            [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0]])
+
+from ldpc.code_util import get_code_parameters
+
+n,k,d,_,_=get_code_parameters(H)
+
+print(f"Code parameters: [{n},{k},{d}]")
+```
+
+    Code parameters: [16,4,6]
+
+
+The hypergraph product of two pairs of the above code gives the following quantum LDPC code
+
+
+```python
+qcode=hgp(H,H,compute_distance=True)
+qcode.test()
+```
+
+    <Unnamed CSS code>, (4,7)-[[400,16,6]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,7)-[[400,16,6]]
+
+
+
+
+
+    True
+
+
+
+
+```python
+
+```
