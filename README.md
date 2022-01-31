@@ -23,7 +23,6 @@ This repository contains the code for the decoding simulations of bias-tailored 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 
-
 ## Setup
 The code in this repository requires functions from [`LDPC`](https://github.com/quantumgizmos/ldpc) and [`BPOSD`](https://github.com/quantumgizmos/bp_osd). To install, run the following command
 
@@ -472,25 +471,9 @@ Now if we take the hypergraph product of this binary matrix, we get the followin
 
 
 ```python
-qcode=hgp(H,H,compute_distance=True) #this will take a while
-qcode.test()
+# qcode=hgp(H,H,compute_distance=True) #this will take a while
+# qcode.test()
 ```
-
-    <Unnamed CSS code>, (4,8)-[[5408,18,26]]
-     -Block dimensions: Pass
-     -PCMs commute hz@hx.T==0: Pass
-     -PCMs commute hx@hz.T==0: Pass
-     -lx \in ker{hz} AND lz \in ker{hx}: Pass
-     -lx and lz anticommute: Pass
-     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[5408,18,26]]
-
-
-
-
-
-    True
-
-
 
 The rate of this code is:
 
@@ -503,7 +486,7 @@ rate
 
 
 
-    0.04326923076923077
+    0.04
 
 
 
@@ -631,4 +614,88 @@ We have now seen two examples of how a quantum code can be constructed from the 
 
 Note that the distance of `d~20` for the lifted product is an estimate based on the lowest weight numerically observed logical operator (more on that below). Whilst the distance of the lifted product is less than that for the hypergrap product (`d~20` vs. `d=26`), the lifted product has a much higher rate. Also, note that the lifted product above has a much higher distance than the [[400,16,6]] hypergraph product constructed from the [16,4,6] classical LDPC code. 
 
+# Bias-tailoring
 
+## The CSS twisted toric code
+
+Recall that the CSS toric code can be obtained 
+
+
+```python
+h1=ring_code(2)
+h2=ring_code(3)
+
+qcode=hgp(h1,h2,compute_distance=True)
+qcode.test()
+```
+
+    <Unnamed CSS code>, (2,4)-[[12,2,2]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (2,4)-[[12,2,2]]
+
+
+
+
+
+    True
+
+
+
+This code has periodic boundary conditions that link opposite sides of the lattice. The distance of this code can be increased by instead defing twisted boundary conditions. This can be achieved by taking the lifted product of two repetition code protographs:
+
+
+```python
+L=6
+a1=pt.array([[(0,1)]])
+a2=pt.array([[(0,2)]])
+
+qcode=lifted_hgp(lift_parameter=L,a=a2,b=a1)
+qcode.compute_code_distance() #this will take some time!
+qcode.test()
+```
+
+    Warning: computing a code distance of codes with N>10 will take a long time.
+
+
+    100%|██████████| 16383/16383 [00:00<00:00, 51842.94it/s]
+
+    <Unnamed CSS code>, (2,4)-[[12,2,3]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (2,4)-[[12,2,3]]
+
+
+    
+
+
+
+
+
+    True
+
+
+
+Here we see that the boundary twist has increased the code distance from `d=2` to `d=3`.
+
+
+```python
+print(qcode.l)
+```
+
+    [[0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0]
+     [0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 1 0 0 0 0]
+     [1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+     [0 1 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+
+
+
+```python
+
+```
