@@ -1,8 +1,11 @@
+
 # Bias-tailored quantum LDPC codes
 
 This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in arxiv:2202:xxxx. Also included are various examples showing how our code base can be used to construct lifted product codes.
 
-
+- [Paste Your Document In Here](#paste-your-document-in-here)
+  * [And a table of contents](#and-a-table-of-contents)
+  * [On the right](#on-the-right)
 - [Bias-tailored quantum LDPC codes](#bias-tailored-quantum-ldpc-codes)
   * [Setup](#setup)
 - [Classical error correction](#classical-error-correction)
@@ -19,6 +22,14 @@ This repository contains the code for the decoding simulations of bias-tailored 
     + [The toric code form the hypergraph product](#the-toric-code-form-the-hypergraph-product)
     + [A quantum LDPC code from the hypergraph product](#a-quantum-ldpc-code-from-the-hypergraph-product)
   * [Lifted product codes](#lifted-product-codes)
+- [Bias-tailoring](#bias-tailoring)
+  * [The CSS twisted toric code](#the-css-twisted-toric-code)
+    + [The CSS twisted toric code under infinite-bias](#the-css-twisted-toric-code-under-infinite-bias)
+  * [The XZZX twisted toric code](#the-xzzx-twisted-toric-code)
+    + [The XZZX twisted toric code under infinite bias](#the-xzzx-twisted-toric-code-under-infinite-bias)
+    + [General construction for XZZX twisted toric codes](#general-construction-for-xzzx-twisted-toric-codes)
+  * [Bias-tailored LDPC codes](#bias-tailored-ldpc-codes)
+- [BP+OSD decoding of bias-tailored LDPC codes](#bp-osd-decoding-of-bias-tailored-ldpc-codes)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -496,25 +507,25 @@ It is clear that the rate of this code is quite small! In the lifted product, we
 ```python
 from lifted_hgp import lifted_hgp
 quantum_protograph_code=lifted_hgp(lift_parameter=13,a=a1,b=a1)
-print(quantum_protograph_code.hx_proto)
+print(quantum_protograph_code.hz_proto)
 ```
 
-    [[(0) () () () (11) () () () (7) () () () (12) () () () (0) (-1) (-11) (-6) () () () () () () () () () () () ()]
-     [() (0) () () () (11) () () () (7) () () () (12) () () (-11) (-8) (0) (-2) () () () () () () () () () () () ()]
-     [() () (0) () () () (11) () () () (7) () () () (12) () (-7) (-1) (-4) (-4) () () () () () () () () () () () ()]
-     [() () () (0) () () () (11) () () () (7) () () () (12) (-12) (-8) (-8) (-12) () () () () () () () () () () () ()]
-     [(1) () () () (8) () () () (1) () () () (8) () () () () () () () (0) (-1) (-11) (-6) () () () () () () () ()]
-     [() (1) () () () (8) () () () (1) () () () (8) () () () () () () (-11) (-8) (0) (-2) () () () () () () () ()]
-     [() () (1) () () () (8) () () () (1) () () () (8) () () () () () (-7) (-1) (-4) (-4) () () () () () () () ()]
-     [() () () (1) () () () (8) () () () (1) () () () (8) () () () () (-12) (-8) (-8) (-12) () () () () () () () ()]
-     [(11) () () () (0) () () () (4) () () () (8) () () () () () () () () () () () (0) (-1) (-11) (-6) () () () ()]
-     [() (11) () () () (0) () () () (4) () () () (8) () () () () () () () () () () (-11) (-8) (0) (-2) () () () ()]
-     [() () (11) () () () (0) () () () (4) () () () (8) () () () () () () () () () (-7) (-1) (-4) (-4) () () () ()]
-     [() () () (11) () () () (0) () () () (4) () () () (8) () () () () () () () () (-12) (-8) (-8) (-12) () () () ()]
-     [(6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () () () () (0) (-1) (-11) (-6)]
-     [() (6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () () () (-11) (-8) (0) (-2)]
-     [() () (6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () () (-7) (-1) (-4) (-4)]
-     [() () () (6) () () () (2) () () () (4) () () () (12) () () () () () () () () () () () () (-12) (-8) (-8) (-12)]]
+    [[(0) (11) (7) (12) () () () () () () () () () () () () (0) () () () (-1) () () () (-11) () () () (-6) () () ()]
+     [(1) (8) (1) (8) () () () () () () () () () () () () () (0) () () () (-1) () () () (-11) () () () (-6) () ()]
+     [(11) (0) (4) (8) () () () () () () () () () () () () () () (0) () () () (-1) () () () (-11) () () () (-6) ()]
+     [(6) (2) (4) (12) () () () () () () () () () () () () () () () (0) () () () (-1) () () () (-11) () () () (-6)]
+     [() () () () (0) (11) (7) (12) () () () () () () () () (-11) () () () (-8) () () () (0) () () () (-2) () () ()]
+     [() () () () (1) (8) (1) (8) () () () () () () () () () (-11) () () () (-8) () () () (0) () () () (-2) () ()]
+     [() () () () (11) (0) (4) (8) () () () () () () () () () () (-11) () () () (-8) () () () (0) () () () (-2) ()]
+     [() () () () (6) (2) (4) (12) () () () () () () () () () () () (-11) () () () (-8) () () () (0) () () () (-2)]
+     [() () () () () () () () (0) (11) (7) (12) () () () () (-7) () () () (-1) () () () (-4) () () () (-4) () () ()]
+     [() () () () () () () () (1) (8) (1) (8) () () () () () (-7) () () () (-1) () () () (-4) () () () (-4) () ()]
+     [() () () () () () () () (11) (0) (4) (8) () () () () () () (-7) () () () (-1) () () () (-4) () () () (-4) ()]
+     [() () () () () () () () (6) (2) (4) (12) () () () () () () () (-7) () () () (-1) () () () (-4) () () () (-4)]
+     [() () () () () () () () () () () () (0) (11) (7) (12) (-12) () () () (-8) () () () (-8) () () () (-12) () () ()]
+     [() () () () () () () () () () () () (1) (8) (1) (8) () (-12) () () () (-8) () () () (-8) () () () (-12) () ()]
+     [() () () () () () () () () () () () (11) (0) (4) (8) () () (-12) () () () (-8) () () () (-8) () () () (-12) ()]
+     [() () () () () () () () () () () () (6) (2) (4) (12) () () () (-12) () () () (-8) () () () (-8) () () () (-12)]]
 
 
 Mapping the above protograph to binary gives us the `hx` component of the CSS code.
@@ -661,7 +672,7 @@ qcode.test()
     Warning: computing a code distance of codes with N>10 will take a long time.
 
 
-    100%|██████████| 16383/16383 [00:00<00:00, 51842.94it/s]
+    100%|██████████| 16383/16383 [00:00<00:00, 60090.39it/s]
 
     <Unnamed CSS code>, (2,4)-[[12,2,3]]
      -Block dimensions: Pass
@@ -684,18 +695,192 @@ qcode.test()
 
 Here we see that the boundary twist has increased the code distance from `d=2` to `d=3`.
 
+### The CSS twisted toric code under infinite-bias
 
-```python
-print(qcode.l)
-```
-
-    [[0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0]
-     [0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 1 0 0 0 0]
-     [1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
-     [0 1 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
-
+Now, consider the performance of the CSS twisted Toric code under X-bias. In this regime, the performance of the code depends exclusively on the `hz` component.
 
 
 ```python
-
+h=qcode.hz
+d=compute_code_distance(h)
+print(f"Hz code distance = {d}")
 ```
+
+    Hz code distance = 3
+
+
+## The XZZX twisted toric code
+
+The XZZX twisted toric code is obtained from the bias-tailored lifted product of two repetition codes. It is equivalent to the CSS twisted toric code up to a Hadamard rotation on the second block of `N/2` qubits. Using our code base, an XZZX twisted toric code can be constructed as follows
+
+
+```python
+from lifted_hgp import bias_tailored_lifted_product
+
+L=6
+a1=pt.array([[(0,1)]])
+a2=pt.array([[(0,2)]])
+
+qcode=bias_tailored_lifted_product(lift_parameter=L,a=a2,b=a1)
+qcode.compute_code_distance() #this will take some time!
+qcode.test()
+```
+
+    Warning: computing a code distance of codes with N>10 will take a long time.
+
+
+    100%|██████████| 16383/16383 [00:00<00:00, 58158.03it/s]
+
+    <Unamed stabiliser code>, [[12,2,3]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unamed stabiliser code> is a valid stabiliser code w/ params [[12,2,3]]
+
+
+    
+
+
+
+
+
+    True
+
+
+
+
+```python
+print(qcode.hx_proto)
+```
+
+    [[() (0,-2)]
+     [(0,2) ()]]
+
+
+### The XZZX twisted toric code under infinite bias
+The XZZX toric code has improved distance in the infinite-bias regime. Eg. for the case of infinite X-bias, the `hz` code distance is
+
+
+```python
+h=qcode.hz
+d=compute_code_distance(h)
+print(f"Hz code distance = {d}")
+```
+
+    Hz code distance = 6
+
+
+Not that this is an improvement on the infinite bias threshold of the CSS twisted toric code of the same size.
+
+### General construction for XZZX twisted toric codes
+
+In general, we define a twisted toric code on a `n1 x n2` lattice. The parity check matrices can be obtained via the bias-tailored lifted product. 
+
+
+```python
+from lifted_hgp import bias_tailored_lifted_product
+
+n1=4
+n2=3
+L=n1*n2
+a1=pt.array([[(0,1)]])
+a2=pt.array([[(0,n2)]])
+
+qcode=bias_tailored_lifted_product(lift_parameter=L,a=a2,b=a1)
+# qcode.compute_code_distance() #this will take some time!
+qcode.test()
+```
+
+    <Unamed stabiliser code>, [[24,2,nan]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unamed stabiliser code> is a valid stabiliser code w/ params [[24,2,nan]]
+
+
+
+
+
+    True
+
+
+
+## Bias-tailored LDPC codes
+
+The bias-tailored lifted product can be used to create a quantum LDPC code from any pair of protographs. For example:
+
+
+```python
+a1=pt.array([
+        [(0), (11), (7), (12)],
+        [(1), (8), (1), (8)],
+        [(11), (0), (4), (8)],
+        [(6), (2), (4), (12)]])
+
+
+qcode = bias_tailored_lifted_product(lift_parameter=13,a=a1,b=a1)
+qcode.test()
+```
+
+    <Unamed stabiliser code>, [[416,18,nan]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unamed stabiliser code> is a valid stabiliser code w/ params [[416,18,nan]]
+
+
+
+
+
+    True
+
+
+
+Now if we print the `hz` protograph, we see that it has been simplified to a set of 8 decoupled copies of original protograph `a1` (and its transpose) along the diagonal. Consequenlty, the quantum code in the infinite bias limit inherits the distance of the classical code `d=26`
+
+
+```python
+with np.printoptions(threshold=np.inf):
+    print(qcode.hz_proto)
+```
+
+    [[(0) (11) (7) (12) () () () () () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [(1) (8) (1) (8) () () () () () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [(11) (0) (4) (8) () () () () () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [(6) (2) (4) (12) () () () () () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () (0) (11) (7) (12) () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () (1) (8) (1) (8) () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () (11) (0) (4) (8) () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () (6) (2) (4) (12) () () () () () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () (0) (11) (7) (12) () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () (1) (8) (1) (8) () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () (11) (0) (4) (8) () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () (6) (2) (4) (12) () () () () () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () (0) (11) (7) (12) () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () (1) (8) (1) (8) () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () (11) (0) (4) (8) () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () (6) (2) (4) (12) () () () () () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () (0) (-1) (-11) (-6) () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () (-11) (-8) (0) (-2) () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () (-7) (-1) (-4) (-4) () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () (-12) (-8) (-8) (-12) () () () () () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () (0) (-1) (-11) (-6) () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () (-11) (-8) (0) (-2) () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () (-7) (-1) (-4) (-4) () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () (-12) (-8) (-8) (-12) () () () () () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () () () () () (0) (-1) (-11) (-6) () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () () () () () (-11) (-8) (0) (-2) () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () () () () () (-7) (-1) (-4) (-4) () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () () () () () (-12) (-8) (-8) (-12) () () () ()]
+     [() () () () () () () () () () () () () () () () () () () () () () () () () () () () (0) (-1) (-11) (-6)]
+     [() () () () () () () () () () () () () () () () () () () () () () () () () () () () (-11) (-8) (0) (-2)]
+     [() () () () () () () () () () () () () () () () () () () () () () () () () () () () (-7) (-1) (-4) (-4)]
+     [() () () () () () () () () () () () () () () () () () () () () () () () () () () () (-12) (-8) (-8) (-12)]]
+
+
+# BP+OSD decoding of bias-tailored LDPC codes
+
+
