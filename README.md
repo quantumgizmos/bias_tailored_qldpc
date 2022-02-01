@@ -3,9 +3,6 @@
 
 This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in arxiv:2202:xxxx. Also included are various examples showing how our code base can be used to construct lifted product codes.
 
-- [Paste Your Document In Here](#paste-your-document-in-here)
-  * [And a table of contents](#and-a-table-of-contents)
-  * [On the right](#on-the-right)
 - [Bias-tailored quantum LDPC codes](#bias-tailored-quantum-ldpc-codes)
   * [Setup](#setup)
 - [Classical error correction](#classical-error-correction)
@@ -30,9 +27,7 @@ This repository contains the code for the decoding simulations of bias-tailored 
     + [General construction for XZZX twisted toric codes](#general-construction-for-xzzx-twisted-toric-codes)
   * [Bias-tailored LDPC codes](#bias-tailored-ldpc-codes)
 - [BP+OSD decoding of bias-tailored LDPC codes](#bp-osd-decoding-of-bias-tailored-ldpc-codes)
-
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
+    + [Decoding under X-bias](#decoding-under-x-bias)
 
 ## Setup
 The code in this repository requires functions from [`LDPC`](https://github.com/quantumgizmos/ldpc) and [`BPOSD`](https://github.com/quantumgizmos/bp_osd). To install, run the following command
@@ -482,9 +477,25 @@ Now if we take the hypergraph product of this binary matrix, we get the followin
 
 
 ```python
-# qcode=hgp(H,H,compute_distance=True) #this will take a while
-# qcode.test()
+qcode=hgp(H,H,compute_distance=True) #this will take a while
+qcode.test()
 ```
+
+    <Unnamed CSS code>, (4,8)-[[5408,18,26]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[5408,18,26]]
+
+
+
+
+
+    True
+
+
 
 The rate of this code is:
 
@@ -497,7 +508,7 @@ rate
 
 
 
-    0.04
+    0.0033284023668639054
 
 
 
@@ -672,7 +683,7 @@ qcode.test()
     Warning: computing a code distance of codes with N>10 will take a long time.
 
 
-    100%|██████████| 16383/16383 [00:00<00:00, 60090.39it/s]
+    100%|██████████| 16383/16383 [00:00<00:00, 52553.58it/s]
 
     <Unnamed CSS code>, (2,4)-[[12,2,3]]
      -Block dimensions: Pass
@@ -729,24 +740,7 @@ qcode.test()
     Warning: computing a code distance of codes with N>10 will take a long time.
 
 
-    100%|██████████| 16383/16383 [00:00<00:00, 58158.03it/s]
-
-    <Unamed stabiliser code>, [[12,2,3]]
-     -Block dimensions: Pass
-     -PCMs commute hz@hx.T==0: Pass
-     -lx \in ker{hz} AND lz \in ker{hx}: Pass
-     -lx and lz anticommute: Pass
-     -<Unamed stabiliser code> is a valid stabiliser code w/ params [[12,2,3]]
-
-
-    
-
-
-
-
-
-    True
-
+    100%|██████████| 16383/16383 [00:00<00:00, 49699.54it/s]
 
 
 
@@ -792,21 +786,6 @@ qcode=bias_tailored_lifted_product(lift_parameter=L,a=a2,b=a1)
 qcode.test()
 ```
 
-    <Unamed stabiliser code>, [[24,2,nan]]
-     -Block dimensions: Pass
-     -PCMs commute hz@hx.T==0: Pass
-     -lx \in ker{hz} AND lz \in ker{hx}: Pass
-     -lx and lz anticommute: Pass
-     -<Unamed stabiliser code> is a valid stabiliser code w/ params [[24,2,nan]]
-
-
-
-
-
-    True
-
-
-
 ## Bias-tailored LDPC codes
 
 The bias-tailored lifted product can be used to create a quantum LDPC code from any pair of protographs. For example:
@@ -819,25 +798,9 @@ a1=pt.array([
         [(11), (0), (4), (8)],
         [(6), (2), (4), (12)]])
 
-
 qcode = bias_tailored_lifted_product(lift_parameter=13,a=a1,b=a1)
 qcode.test()
 ```
-
-    <Unamed stabiliser code>, [[416,18,nan]]
-     -Block dimensions: Pass
-     -PCMs commute hz@hx.T==0: Pass
-     -lx \in ker{hz} AND lz \in ker{hx}: Pass
-     -lx and lz anticommute: Pass
-     -<Unamed stabiliser code> is a valid stabiliser code w/ params [[416,18,nan]]
-
-
-
-
-
-    True
-
-
 
 Now if we print the `hz` protograph, we see that it has been simplified to a set of 8 decoupled copies of original protograph `a1` (and its transpose) along the diagonal. Consequenlty, the quantum code in the infinite bias limit inherits the distance of the classical code `d=26`
 
@@ -882,5 +845,101 @@ with np.printoptions(threshold=np.inf):
 
 
 # BP+OSD decoding of bias-tailored LDPC codes
+
+Bias-tailored quantum LDPC codes are not CSS as they have mixed type stabilisers. However, they are equivalent to a CSS code up a Hadamard rotation on a subset of the code qubits. As a result, it is possible to simulate their decoding using a standard CSS decoder with a modified error channel. In this project, we used the belief propagation plus ordered statistics decoder from the [`BPOSD`](https://github.com/quantumgizmos/bp_osd) package. Below we show an example of a short 1000 cycle decoding simulation of a bias-tailored lifted product code under depolarising noise:
+
+
+```python
+from bposd.css_decode_sim import css_decode_sim
+
+a1=pt.array([
+        [(0), (11), (7), (12)],
+        [(1), (8), (1), (8)],
+        [(11), (0), (4), (8)],
+        [(6), (2), (4), (12)]])
+
+qcode = lifted_hgp(lift_parameter=13,a=a1,b=a1)
+
+sim_input={
+"error_rate": 0.10, #the physical error rate on the qubits
+"target_runs": 1000, #the number of cycles to simulate
+"bp_method": "minimum_sum", #the bp method
+"ms_scaling_factor": 0.625, # the min-sum scaling factor
+"osd_method": "osd_e", # OSD method
+"osd_order": 10, #OSD order
+"xyz_error_bias": [1,1,1], #the relative XYZ bias
+"hadamard_rotate": True, #Hadamard rotate
+"hadamard_rotate_sector1_length": qcode.hx1.shape[1], #the length of sector 1 qubit block. All qubits in sector 2 are Hadamard rotated
+"channel_update": "x->z", # the channel update orientation
+'max_iter': int(qcode.N/10), #the interation depth for BP
+'tqdm_disable': False #show live stas
+}
+css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
+```
+
+    RNG Seed: 3123502516
+    Constructing CSS code from hx and hz matrices...
+    Checking the CSS code is valid...
+    <Unnamed CSS code>, (4,8)-[[416,18,nan]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
+
+
+    d_max: 20; OSDW_WER: 1.72±0.079%; OSDW: 26.8±1.4%; OSD0: 27.8±1.4%;: 100% 1000/1000 [00:39<00:00, 25.14it/s]
+
+
+
+
+
+    <bposd.css_decode_sim.css_decode_sim at 0x7f0869dbfe50>
+
+
+
+### Decoding under X-bias
+
+Below we repeat the simulation with biased X-noise.
+
+
+```python
+sim_input={
+"error_rate": 0.10, #the physical error rate on the qubits
+"target_runs": 1000, #the number of cycles to simulate
+"bp_method": "minimum_sum", #the bp method
+"ms_scaling_factor": 0.625, # the min-sum scaling factor
+"osd_method": "osd_e", # OSD method
+"osd_order": 10, #OSD order
+"xyz_error_bias": [10,1,1], #the relative XYZ bias
+"hadamard_rotate": True, #Hadamard rotate
+"hadamard_rotate_sector1_length": qcode.hx1.shape[1], #the length of sector 1 qubit block. All qubits in sector 2 are Hadamard rotated
+"channel_update": "x->z", # the channel update orientation
+'max_iter': int(qcode.N/10), #the interation depth for BP
+'tqdm_disable': False #show live stas
+}
+css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
+```
+
+    RNG Seed: 848215817
+    Constructing CSS code from hx and hz matrices...
+    Checking the CSS code is valid...
+    <Unnamed CSS code>, (4,8)-[[416,18,nan]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
+
+
+    d_max: 26; OSDW_WER: 0.067±0.019%; OSDW: 1.2±0.34%; OSD0: 2.2±0.46%;: 100% 1000/1000 [00:12<00:00, 81.35it/s]     
+
+
+
+
+
+    <bposd.css_decode_sim.css_decode_sim at 0x7f0869dbfd30>
 
 

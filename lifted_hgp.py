@@ -31,6 +31,8 @@ class lifted_hgp(css_code):
         self.hz1_proto=pt.kron(I(self.a_n),self.b)
         self.hz2_proto=pt.kron(self.a.T,I(self.b_m))
         self.hz_proto=pt.hstack([self.hz1_proto,self.hz2_proto])
+        
+        self.lift_parameter=lift_parameter
 
         super().__init__(self.hx_proto.to_binary(lift_parameter),self.hz_proto.to_binary(lift_parameter))
 
@@ -39,6 +41,19 @@ class lifted_hgp(css_code):
         px=pt.vstack([pt.zeros(self.hz_proto.shape),self.hx_proto])
         pz=pt.vstack([self.hz_proto,pt.zeros(self.hx_proto.shape)])
         return pt.hstack([px,pz])
+
+    @property
+    def hx1(self):
+        return self.hx1_proto.to_binary(self.lift_parameter)
+    @property
+    def hx2(self):
+        return self.hx2_proto.to_binary(self.lift_parameter)
+    @property
+    def hz1(self):
+        return self.hz1_proto.to_binary(self.lift_parameter)
+    @property
+    def hz2(self):
+        return self.hz2_proto.to_binary(self.lift_parameter)
 
 
 class bias_tailored_lifted_product(stab_code):
@@ -63,13 +78,5 @@ class bias_tailored_lifted_product(stab_code):
         pz=pt.vstack([self.hz_proto,pt.zeros(self.hx_proto.shape)])
         return pt.hstack([px,pz])
 
-
-
-
-
-    def bias_tailor(self):
-        hx_top=pt.hstack([pt.zeros(self.hx1_proto.shape),self.hz2_proto])
-        hx_bottom=pt.hstack([self.hx1_proto,pt.zeros(self.hz2_proto.shape)])
-        hx=self.vstack([hx_top,hx_bottom])
 
 
