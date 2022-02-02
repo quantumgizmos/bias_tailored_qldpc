@@ -13121,7 +13121,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Bias-tailored-quantum-LDPC-codes">Bias-tailored quantum LDPC codes<a class="anchor-link" href="#Bias-tailored-quantum-LDPC-codes">&#182;</a></h1><p>This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in arxiv:2202:xxxx. Also included are various examples showing how our code base can be used to construct lifted product codes.</p>
+<h1 id="Bias-tailored-quantum-LDPC-codes">Bias-tailored quantum LDPC codes<a class="anchor-link" href="#Bias-tailored-quantum-LDPC-codes">&#182;</a></h1><p>This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a>. Also included are various examples showing how our code base can be used to construct lifted product codes.</p>
 <ul>
 <li><a href="#bias-tailored-quantum-ldpc-codes">Bias-tailored quantum LDPC codes</a><ul>
 <li><a href="#setup">Setup</a></li>
@@ -13179,7 +13179,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Classical-error-correction">Classical error correction<a class="anchor-link" href="#Classical-error-correction">&#182;</a></h1><p>Section 2.1 in arXiv:2202:xxxx</p>
+<h1 id="Classical-error-correction">Classical error correction<a class="anchor-link" href="#Classical-error-correction">&#182;</a></h1><p>Section 2.1 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
 <p>A binary linear code is defined by its parity check matrix. Eg. the parity check matrix for the four-bit (closed loop) repetition code is given by</p>
 
 </div>
@@ -13271,7 +13271,7 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Quasi-cyclic-codes">Quasi-cyclic codes<a class="anchor-link" href="#Quasi-cyclic-codes">&#182;</a></h2><p>Section 2.3 in arXiv:2202:xxxx</p>
+<h2 id="Quasi-cyclic-codes">Quasi-cyclic codes<a class="anchor-link" href="#Quasi-cyclic-codes">&#182;</a></h2><p>Section 2.3 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
 <p>Quasicyclic codes are a type of classical linear code that are highly performant under BP decoding. The parity check matrix of a quasi-cyclic code is a block matrix where each block corresponds to a sum over permutation matrices.</p>
 <h3 id="Permutation-matrices">Permutation matrices<a class="anchor-link" href="#Permutation-matrices">&#182;</a></h3><p>A permuation matrix is defined as the matrix obtained by shifting an <code>LxL</code> matrix by <code>t</code> positions to the right. After <code>t=L</code> shifts, the identity is recovered. eg.</p>
 
@@ -13913,7 +13913,7 @@ t=3
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Hypergraph-product-codes">Hypergraph product codes<a class="anchor-link" href="#Hypergraph-product-codes">&#182;</a></h2><p>Section 3.3 in arXiv:2202:xxxx</p>
+<h2 id="Hypergraph-product-codes">Hypergraph product codes<a class="anchor-link" href="#Hypergraph-product-codes">&#182;</a></h2><p>Section 3.3 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
 
 </div>
 </div>
@@ -13921,7 +13921,7 @@ t=3
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We have now seen that CSS stabiliser codes cannot take any arbitrary combination of <code>hx</code> and <code>hz</code> matrices as inputs due to the requirement that stabilisers must commute. So how do we create quantum codes from the starting point of classical codes? One solution is to use a code construction method called the hypegraph product which was first proposed by Tillich and Zemor. This defines the <code>hx</code> and <code>hz</code> components of the CSS code as follows:</p>
+<p>We have now seen that CSS stabiliser codes cannot take any arbitrary combination of <code>hx</code> and <code>hz</code> matrices as inputs due to the requirement that stabilisers must commute. So how do we create quantum codes from the starting point of classical codes? One solution is to use a code construction method called the hypegraph product which was first proposed by <a href="https://arxiv.org/abs/0903.0566">Tillich and Zemor</a>. This defines the <code>hx</code> and <code>hz</code> components of the CSS code as follows:</p>
 
 <pre><code>hx=[ h1 ⊗ I, h2^T ⊗ I ]
 hz=[ I ⊗ h2, h1^t ⊗ I]</code></pre>
@@ -14003,7 +14003,8 @@ hz=[ I ⊗ h2, h1^t ⊗ I]</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="A-quantum-LDPC-code-from-the-hypergraph-product">A quantum LDPC code from the hypergraph product<a class="anchor-link" href="#A-quantum-LDPC-code-from-the-hypergraph-product">&#182;</a></h3><p>The hypergraph product can also be used to create quantum LDPC codes from the starting point of classical LDPC codes. For example, consider the following classical LDPC code of the length 16</p>
+<h3 id="A-quantum-LDPC-code-from-the-hypergraph-product">A quantum LDPC code from the hypergraph product<a class="anchor-link" href="#A-quantum-LDPC-code-from-the-hypergraph-product">&#182;</a></h3><p>Example 3.2 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
+<p>The hypergraph product can also be used to create quantum LDPC codes from the starting point of classical LDPC codes. For example, consider the following classical LDPC code of the length 16</p>
 
 </div>
 </div>
@@ -14118,7 +14119,8 @@ hz=[ I ⊗ h2, h1^t ⊗ I]</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Lifted-product-codes">Lifted product codes<a class="anchor-link" href="#Lifted-product-codes">&#182;</a></h2><p>The lifted product is an extension of the hypergraph product that allows quantum codes to be constructed from pairs of classical quasi-cyclic codes. The lifted product was first proposed by Pantaleev and Kalachev and has been proved to yield asympotically good quantum LDPC codes with linear distance-to-block length scaling. In a lifted product code, the <code>hx</code> and <code>hz</code> CSS components are constructed from two protographs defined as follows:</p>
+<h2 id="Lifted-product-codes">Lifted product codes<a class="anchor-link" href="#Lifted-product-codes">&#182;</a></h2><p>Section 3.4 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
+<p>The lifted product is an extension of the hypergraph product that allows quantum codes to be constructed from pairs of classical quasi-cyclic codes. The lifted product was first proposed by <a href="https://arxiv.org/abs/2111.03654">Pantaleev and Kalachev</a> and has been proved to yield asympotically good quantum LDPC codes with linear distance-to-block length scaling. In a lifted product code, the <code>hx</code> and <code>hz</code> CSS components are constructed from two protographs defined as follows:</p>
 
 <pre><code>ax=[ a1 ⊗ E, a2^T ⊗ E ]
 az=[ E ⊗ a2, a1^t ⊗ E]</code></pre>
@@ -14594,14 +14596,16 @@ az=[ E ⊗ a2, a1^t ⊗ E]</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Bias-tailoring">Bias-tailoring<a class="anchor-link" href="#Bias-tailoring">&#182;</a></h1>
+<h1 id="Bias-tailoring">Bias-tailoring<a class="anchor-link" href="#Bias-tailoring">&#182;</a></h1><p>Section 4 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="The-CSS-twisted-toric-code">The CSS twisted toric code<a class="anchor-link" href="#The-CSS-twisted-toric-code">&#182;</a></h2><p>Recall that the CSS toric code can be obtained</p>
+<h2 id="The-CSS-twisted-toric-code">The CSS twisted toric code<a class="anchor-link" href="#The-CSS-twisted-toric-code">&#182;</a></h2><p>Section 4.2 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
+<p>Recall that the CSS toric code can be obtained from the hypergaraph product of two repetition codes</p>
 
 </div>
 </div>
@@ -14808,7 +14812,8 @@ az=[ E ⊗ a2, a1^t ⊗ E]</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="The-XZZX-twisted-toric-code">The XZZX twisted toric code<a class="anchor-link" href="#The-XZZX-twisted-toric-code">&#182;</a></h2><p>The XZZX twisted toric code is obtained from the bias-tailored lifted product of two repetition codes. It is equivalent to the CSS twisted toric code up to a Hadamard rotation on the second block of <code>N/2</code> qubits. Using our code base, an XZZX twisted toric code can be constructed as follows</p>
+<h2 id="The-XZZX-twisted-toric-code">The XZZX twisted toric code<a class="anchor-link" href="#The-XZZX-twisted-toric-code">&#182;</a></h2><p>Section 4.5 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
+<p>The XZZX twisted toric code is obtained from the bias-tailored lifted product of two repetition codes. It is equivalent to the CSS twisted toric code up to a Hadamard rotation on the second block of <code>N/2</code> qubits. Using our code base, an XZZX twisted toric code can be constructed as follows</p>
 
 </div>
 </div>
@@ -14978,7 +14983,8 @@ az=[ E ⊗ a2, a1^t ⊗ E]</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Bias-tailored-LDPC-codes">Bias-tailored LDPC codes<a class="anchor-link" href="#Bias-tailored-LDPC-codes">&#182;</a></h2><p>The bias-tailored lifted product can be used to create a quantum LDPC code from any pair of protographs. For example:</p>
+<h2 id="Bias-tailored-LDPC-codes">Bias-tailored LDPC codes<a class="anchor-link" href="#Bias-tailored-LDPC-codes">&#182;</a></h2><p>Section 4.6 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a></p>
+<p>The bias-tailored lifted product can be used to create a quantum LDPC code from any pair of protographs. For example:</p>
 
 </div>
 </div>
@@ -15077,7 +15083,8 @@ az=[ E ⊗ a2, a1^t ⊗ E]</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="BP+OSD-decoding-of-bias-tailored-LDPC-codes">BP+OSD decoding of bias-tailored LDPC codes<a class="anchor-link" href="#BP+OSD-decoding-of-bias-tailored-LDPC-codes">&#182;</a></h1>
+<h1 id="BP+OSD-decoding-of-bias-tailored-LDPC-codes">BP+OSD decoding of bias-tailored LDPC codes<a class="anchor-link" href="#BP+OSD-decoding-of-bias-tailored-LDPC-codes">&#182;</a></h1><p>Section 5 in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a>. Also see Appendix D in <a href="https://arxiv.org/abs/arXiv:2202:xxxx">arXiv:2202.xxxx</a> for details regarding the simulation procedure.</p>
+
 </div>
 </div>
 </div>

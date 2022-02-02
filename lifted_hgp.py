@@ -24,12 +24,12 @@ class lifted_hgp(css_code):
         
         self.b_m,self.b_n=self.b.shape
 
-        self.hx1_proto=pt.kron(self.a,I(self.b_n))
-        self.hx2_proto=pt.kron(I(self.a_m),self.b.T)
+        self.hx1_proto=np.kron(self.a,I(self.b_n))
+        self.hx2_proto=np.kron(I(self.a_m),self.b.T)
         self.hx_proto=pt.hstack([self.hx1_proto,self.hx2_proto])
 
-        self.hz1_proto=pt.kron(I(self.a_n),self.b)
-        self.hz2_proto=pt.kron(self.a.T,I(self.b_m))
+        self.hz1_proto=np.kron(I(self.a_n),self.b)
+        self.hz2_proto=np.kron(self.a.T,I(self.b_m))
         self.hz_proto=pt.hstack([self.hz1_proto,self.hz2_proto])
         
         self.lift_parameter=lift_parameter
