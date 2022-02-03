@@ -116,10 +116,10 @@ The set of `L` distinct permutation matrices forms a basis of a vector space ref
 
 ```python
 ring_element=pt.RingOfCirculantsF2((0,1))
-print(repr(ring_element))
+print(ring_element)
 ```
 
-    (0,1)
+    λ(0,1)
 
 
 The above ring element can be mapped to binary representation (of size L) as follows:
@@ -204,10 +204,6 @@ print(A)
 
     [[λ(1,2) λ(0) λ()]
      [λ(0) λ(0,1) λ(1)]]
-
-
-    /home/joschka/miniconda3/envs/test/lib/python3.6/site-packages/ldpc/protograph.py:172: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray
-      temp_proto = np.array(proto_array).astype(object)
 
 
 We can convert this to a binary parity check matrix as follows:
@@ -358,11 +354,11 @@ hx=[ h1 ⊗ I, h2^T ⊗ I ]
 hz=[ I ⊗ h2, h1^t ⊗ I]
 ```
 
+where `h1` and `h2` are two classical *seed* codes. It is straightforward to verify that the above two parity check matrices will commute for any combination of the seed codes. The hypergraph product therefore allows us to construct a quantum code from any arbitrary pair of classical binary codes.
+
 ### The toric code form the hypergraph product
 
 The toric code can be constructed from the hypergraph product of two closed loop repetition codes.
-
-where `h1` and `h2` are two classical *seed* codes. It is straightforward to verify that the above two parity check matrices will commute for any combination of the seed codes. The hypergraph product therefore allows us to construct a quantum code from any arbitrary pair of classical binary codes.
 
 
 ```python
@@ -703,7 +699,7 @@ qcode.test()
     Warning: computing a code distance of codes with N>10 will take a long time.
 
 
-    100%|██████████| 16383/16383 [00:00<00:00, 44089.63it/s]
+    100%|██████████| 16383/16383 [00:00<00:00, 48147.73it/s]
 
     <Unnamed CSS code>, (2,4)-[[12,2,3]]
      -Block dimensions: Pass
@@ -762,7 +758,7 @@ qcode.test()
     Warning: computing a code distance of codes with N>10 will take a long time.
 
 
-    100%|██████████| 16383/16383 [00:00<00:00, 47688.08it/s]
+    100%|██████████| 16383/16383 [00:00<00:00, 48120.62it/s]
 
     <Unamed stabiliser code>, [[12,2,3]]
      -Block dimensions: Pass
@@ -966,7 +962,7 @@ sim_input={
 css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
 ```
 
-    RNG Seed: 2069060603
+    RNG Seed: 162338903
     Constructing CSS code from hx and hz matrices...
     Checking the CSS code is valid...
     <Unnamed CSS code>, (4,8)-[[416,18,nan]]
@@ -978,7 +974,15 @@ css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
      -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
 
 
-    d_max: 26; OSDW_WER: 1.86±0.085%; OSDW: 28.7±1.5%; OSD0: 29.7±1.5%;:  90% 897/1000 [00:39<00:03, 32.61it/s]
+    d_max: 52; OSDW_WER: 1.61±0.077%; OSDW: 25.4±1.4%; OSD0: 26.5±1.4%;: 100% 1000/1000 [00:42<00:00, 23.63it/s]
+
+
+
+
+
+    <bposd.css_decode_sim.css_decode_sim at 0x7faad8f3e190>
+
+
 
 ### Decoding under X-bias
 
@@ -1002,3 +1006,27 @@ sim_input={
 }
 css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
 ```
+
+    RNG Seed: 3583058494
+    Constructing CSS code from hx and hz matrices...
+    Checking the CSS code is valid...
+    <Unnamed CSS code>, (4,8)-[[416,18,nan]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
+
+
+    d_max: 26; OSDW_WER: 0.0727±0.02%; OSDW: 1.3±0.36%; OSD0: 2.5±0.49%;: 100% 1000/1000 [00:14<00:00, 70.52it/s]    
+
+
+
+
+
+    <bposd.css_decode_sim.css_decode_sim at 0x7fab18f83dc0>
+
+
+
+The above simulation is run under an X-biased error model where `px=10*pz=10*py`. In this regime, the word error rate is supressed by more than an order of magnitude compared to the depolarising noise simulation.
