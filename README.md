@@ -3,6 +3,32 @@
 
 This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx). Also included are various examples showing how our code base can be used to construct lifted product codes.
 
+- [Bias-tailored quantum LDPC codes](#bias-tailored-quantum-ldpc-codes)
+  * [Setup](#setup)
+- [Classical error correction](#classical-error-correction)
+  * [Quasi-cyclic codes](#quasi-cyclic-codes)
+    + [Permutation matrices](#permutation-matrices)
+    + [The ring of circulants](#the-ring-of-circulants)
+      - [Matrix version](#matrix-version)
+      - [Ring version](#ring-version)
+    + [Protographs](#protographs)
+    + [The repetition code as a quasi-cyclic code](#the-repetition-code-as-a-quasi-cyclic-code)
+- [Quantum error correction](#quantum-error-correction)
+  * [Calderbank, Shor & Steane (CSS codes)](#calderbank--shor---steane--css-codes-)
+  * [Hypergraph product codes](#hypergraph-product-codes)
+    + [The toric code form the hypergraph product](#the-toric-code-form-the-hypergraph-product)
+    + [A quantum LDPC code from the hypergraph product](#a-quantum-ldpc-code-from-the-hypergraph-product)
+  * [Lifted product codes](#lifted-product-codes)
+- [Bias-tailoring](#bias-tailoring)
+  * [The CSS twisted toric code](#the-css-twisted-toric-code)
+    + [The CSS twisted toric code under infinite-bias](#the-css-twisted-toric-code-under-infinite-bias)
+  * [The XZZX twisted toric code](#the-xzzx-twisted-toric-code)
+    + [The XZZX twisted toric code under infinite bias](#the-xzzx-twisted-toric-code-under-infinite-bias)
+    + [General construction for XZZX twisted toric codes](#general-construction-for-xzzx-twisted-toric-codes)
+  * [Bias-tailored LDPC codes](#bias-tailored-ldpc-codes)
+- [BP+OSD decoding of bias-tailored LDPC codes](#bp-osd-decoding-of-bias-tailored-ldpc-codes)
+    + [Decoding under X-bias](#decoding-under-x-bias)
+
 ## Setup
 The code in this repository requires functions from [`LDPC`](https://github.com/quantumgizmos/ldpc) and [`BPOSD`](https://github.com/quantumgizmos/bp_osd). To install, run the following command
 
@@ -178,6 +204,10 @@ print(A)
 
     [[λ(1,2) λ(0) λ()]
      [λ(0) λ(0,1) λ(1)]]
+
+
+    /home/joschka/miniconda3/envs/test/lib/python3.6/site-packages/ldpc/protograph.py:172: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify 'dtype=object' when creating the ndarray
+      temp_proto = np.array(proto_array).astype(object)
 
 
 We can convert this to a binary parity check matrix as follows:
@@ -462,17 +492,40 @@ Now if we take the hypergraph product of this binary matrix, we get the followin
 
 
 ```python
-# qcode=hgp(H,H,compute_distance=True) #this will take a while
-# qcode.test()
+qcode=hgp(H,H,compute_distance=True) #this will take a while
+qcode.test()
 ```
+
+    <Unnamed CSS code>, (4,8)-[[5408,18,26]]
+     -Block dimensions: Pass
+     -PCMs commute hz@hx.T==0: Pass
+     -PCMs commute hx@hz.T==0: Pass
+     -lx \in ker{hz} AND lz \in ker{hx}: Pass
+     -lx and lz anticommute: Pass
+     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[5408,18,26]]
+
+
+
+
+
+    True
+
+
 
 The rate of this code is:
 
 
 ```python
-# rate=qcode.K/qcode.N
-# rate
+rate=qcode.K/qcode.N
+rate
 ```
+
+
+
+
+    0.0033284023668639054
+
+
 
 It is clear that the rate of this code is quite small! In the lifted product, we instead define the quantum code as a hypergraph product of two protographs. This requires performing all tensor product operations over the ring algebra, but results in a much more compact code.
 
@@ -650,7 +703,7 @@ qcode.test()
     Warning: computing a code distance of codes with N>10 will take a long time.
 
 
-    100%|██████████| 16383/16383 [00:00<00:00, 47801.20it/s]
+    100%|██████████| 16383/16383 [00:00<00:00, 44089.63it/s]
 
     <Unnamed CSS code>, (2,4)-[[12,2,3]]
      -Block dimensions: Pass
@@ -709,7 +762,7 @@ qcode.test()
     Warning: computing a code distance of codes with N>10 will take a long time.
 
 
-    100%|██████████| 16383/16383 [00:00<00:00, 48054.69it/s]
+    100%|██████████| 16383/16383 [00:00<00:00, 47688.08it/s]
 
     <Unamed stabiliser code>, [[12,2,3]]
      -Block dimensions: Pass
@@ -913,7 +966,7 @@ sim_input={
 css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
 ```
 
-    RNG Seed: 2897217158
+    RNG Seed: 2069060603
     Constructing CSS code from hx and hz matrices...
     Checking the CSS code is valid...
     <Unnamed CSS code>, (4,8)-[[416,18,nan]]
@@ -925,15 +978,7 @@ css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
      -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
 
 
-    d_max: 32; OSDW_WER: 1.48±0.075%; OSDW: 23.5±1.3%; OSD0: 24.7±1.4%;: 100% 1000/1000 [00:38<00:00, 25.71it/s]
-
-
-
-
-
-    <bposd.css_decode_sim.css_decode_sim at 0x7fe5ea274eb0>
-
-
+    d_max: 26; OSDW_WER: 1.86±0.085%; OSDW: 28.7±1.5%; OSD0: 29.7±1.5%;:  90% 897/1000 [00:39<00:03, 32.61it/s]
 
 ### Decoding under X-bias
 
@@ -957,25 +1002,3 @@ sim_input={
 }
 css_decode_sim(hx=qcode.hx,hz=qcode.hz,**sim_input)
 ```
-
-    RNG Seed: 4071249900
-    Constructing CSS code from hx and hz matrices...
-    Checking the CSS code is valid...
-    <Unnamed CSS code>, (4,8)-[[416,18,nan]]
-     -Block dimensions: Pass
-     -PCMs commute hz@hx.T==0: Pass
-     -PCMs commute hx@hz.T==0: Pass
-     -lx \in ker{hz} AND lz \in ker{hx}: Pass
-     -lx and lz anticommute: Pass
-     -<Unnamed CSS code> is a valid CSS code w/ params (4,8)-[[416,18,nan]]
-
-
-    d_max: 26; OSDW_WER: 0.067±0.019%; OSDW: 1.2±0.34%; OSD0: 2.6±0.5%;: 100% 1000/1000 [00:10<00:00, 97.04it/s]     
-
-
-
-
-
-    <bposd.css_decode_sim.css_decode_sim at 0x7fe5ea274b80>
-
-
