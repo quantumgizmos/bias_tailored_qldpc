@@ -1,7 +1,7 @@
 
 # Bias-tailored quantum LDPC codes
 
-This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx). Also included are various examples showing how our code base can be used to construct lifted product codes.
+This repository contains the code for the decoding simulations of bias-tailored quantum LDPC codes as described in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702). Also included are various examples showing how our code base can be used to construct lifted product codes.
 
 - [Bias-tailored quantum LDPC codes](#bias-tailored-quantum-ldpc-codes)
   * [Setup](#setup)
@@ -37,7 +37,7 @@ pip install -U ldpc bposd
 ```
 
 # Classical error correction 
-Section 2.1 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 2.1 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 
 
@@ -75,7 +75,7 @@ print(f"[{n},{k},{d}]")
 
 
 ## Quasi-cyclic codes
-Section 2.3 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 2.3 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 Quasicyclic codes are a type of classical linear code that are highly performant under BP decoding. The parity check matrix of a quasi-cyclic code is a block matrix where each block corresponds to a sum over permutation matrices.
 
@@ -345,7 +345,7 @@ qcode.test()
 The `qcode.test` function executed above tells us that the `hx` and `hz` matrices do not commute.
 
 ## Hypergraph product codes
-Section 3.3 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 3.3 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 We have now seen that CSS stabiliser codes cannot take any arbitrary combination of `hx` and `hz` matrices as inputs due to the requirement that stabilisers must commute. So how do we create quantum codes from the starting point of classical codes? One solution is to use a code construction method called the hypegraph product which was first proposed by [Tillich and Zemor](https://arxiv.org/abs/0903.0566). This defines the `hx` and `hz` components of the CSS code as follows:
 
@@ -389,7 +389,7 @@ qcode.test()
 
 ### A quantum LDPC code from the hypergraph product
 
-Example 3.2 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Example 3.2 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 The hypergraph product can also be used to create quantum LDPC codes from the starting point of classical LDPC codes. For example, consider the following classical LDPC code of the length 16
 
@@ -444,7 +444,7 @@ qcode.test()
 
 ## Lifted product codes
 
-Section 3.4 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 3.4 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 The lifted product is an extension of the hypergraph product that allows quantum codes to be constructed from pairs of classical quasi-cyclic codes. The lifted product was first proposed by [Pantaleev and Kalachev](https://arxiv.org/abs/2111.03654) and has been proved to yield asympotically good quantum LDPC codes with linear distance-to-block length scaling. In a lifted product code, the `hx` and `hz` CSS components are constructed from two protographs defined as follows:
 
@@ -649,12 +649,12 @@ Note that the distance of `d~20` for the lifted product is an estimate based on 
 
 # Bias-tailoring
 
-Section 4 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 4 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 
 ## The CSS twisted toric code
 
-Section 4.2 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 4.2 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 Recall that the CSS toric code can be obtained from the hypergaraph product of two repetition codes
 
@@ -738,7 +738,7 @@ print(f"Hz code distance = {d}")
 
 ## The XZZX twisted toric code
 
-Section 4.5 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 4.5 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 The XZZX twisted toric code is obtained from the bias-tailored lifted product of two repetition codes. It is equivalent to the CSS twisted toric code up to a Hadamard rotation on the second block of `N/2` qubits. Using our code base, an XZZX twisted toric code can be constructed as follows
 
@@ -836,7 +836,7 @@ qcode.test()
 
 ## Bias-tailored LDPC codes
 
-Section 4.6 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx)
+Section 4.6 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 The bias-tailored lifted product can be used to create a quantum LDPC code from any pair of protographs. For example:
 
@@ -929,7 +929,7 @@ with np.printoptions(threshold=np.inf):
 
 # BP+OSD decoding of bias-tailored LDPC codes
 
-Section 5 in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx). Also see Appendix D in [arXiv:2202.xxxx](https://arxiv.org/abs/arXiv:2202:xxxx) for details regarding the simulation procedure.
+Section 5 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702). Also see Appendix D in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702) for details regarding the simulation procedure.
 
 Bias-tailored quantum LDPC codes are not CSS as they have mixed type stabilisers. However, they are equivalent to a CSS code up a Hadamard rotation on a subset of the code qubits. As a result, it is possible to simulate their decoding using a standard CSS decoder with a modified error channel. In this project, we used the belief propagation plus ordered statistics decoder from the [`BPOSD`](https://github.com/quantumgizmos/bp_osd) package. Below we show an example of a short 1000 cycle decoding simulation of a bias-tailored lifted product code under depolarising noise:
 
