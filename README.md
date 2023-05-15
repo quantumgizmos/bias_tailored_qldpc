@@ -245,7 +245,7 @@ print(H)
 
 ## Calderbank, Shor & Steane (CSS codes)
 
-Section 3.2 in arXiv:2202.xxxx
+Section 3.2 in [arXiv:2202.01702](https://arxiv.org/abs/2202.01702)
 
 CSS codes are quantum stabiliser codes with non-overlapping X- and Z- stabilisers. Using our code, you can construct a CSS code as follows:
 
@@ -356,7 +356,7 @@ hz=[ I ⊗ h2, h1^t ⊗ I]
 
 where `h1` and `h2` are two classical *seed* codes. It is straightforward to verify that the above two parity check matrices will commute for any combination of the seed codes. The hypergraph product therefore allows us to construct a quantum code from any arbitrary pair of classical binary codes.
 
-### The toric code form the hypergraph product
+### The toric code from the hypergraph product
 
 The toric code can be constructed from the hypergraph product of two closed loop repetition codes.
 
